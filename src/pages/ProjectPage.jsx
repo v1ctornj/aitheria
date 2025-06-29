@@ -10,9 +10,17 @@ import ProjectNotes from "./ProjectNotes";
 import ProjectContextualization from "./ProjectContextualization" ;
 import ProjectExport  from "./ProjectExport";
 import { account } from "@/appwrite/client"; // Adjust the import path as needed
+import logo from '/logo.png';
+import useStore from "@/store";
+
 //import { APPWRITE, ASSEMBLY } from "@/config";
 // constants for Appwrite and AssemblyAI
 // Replace these with your actual Appwrite and AssemblyAI configuration
+// The API keys and IDs should be replaced with your actual Appwrite IDs
+// The API Keys are exposed here for demonstration purposes only.
+// In a real-world application, you should never expose your API keys in the frontend.
+// Always use environment variables and server-side functions to handle sensitive operations securely.
+
 const DATABASE_ID = "685121b70037b398f4a7";
 const COLLECTION_ID = "6851221a003005960079";
 const INTERVIEWS_COLLECTION_ID = "685122df0018fb587665";
@@ -32,6 +40,7 @@ const TABS = [
 
 export default function ProjectDashboard() {
     const { projectId } = useParams();
+    const userId = useStore(state => state.userId);
     const navigate = useNavigate();
     const [project, setProject] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -374,9 +383,9 @@ export default function ProjectDashboard() {
             <header className="flex items-center justify-between px-8 py-6 sticky top-0 z-20 bg-white/80 backdrop-blur-md shadow-sm">
                 <div className="flex items-center gap-4">
                     <img
-                        src="/logo.png"
-                        alt="Aitheria Logo"
-                        className="h-10 w-10 rounded-full cursor-pointer transition-transform duration-200 hover:scale-110"
+                        src={logo}
+                        alt="aitheria"
+                        className="h-12 w-12 object-contain hover:cursor-pointer"
                         onClick={() => navigate("/dashboard")}
                         title="Back to dashboard"
                         tabIndex={0}
@@ -403,7 +412,7 @@ export default function ProjectDashboard() {
                                 />
                                 <Button
                                     size="icon"
-                                    className="ml-1 bg-pastel-pink text-black hover:bg-pastel-pink/80 rounded-full"
+                                    className="ml-1 bg-pastel-pink text-black hover:bg-pastel-pink/80 rounded-full hover:cursor-pointer"
                                     onClick={handleRename}
                                     disabled={saving}
                                     aria-label="Save"
@@ -564,6 +573,7 @@ export default function ProjectDashboard() {
                     )}
                    {tab === "notes" && (
                       <ProjectNotes
+                        userId={userId}
                         projectId={projectId}
                         interviews={interviews}
                         note={notes}

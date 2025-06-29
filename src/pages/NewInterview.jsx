@@ -3,6 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { databases, storage, ID } from "@/appwrite/client";
 import { Button } from "@/components/ui/button";
 import { Upload, StickyNote, Download, Lightbulb, List, Pencil, Check, FileText, Trash2 } from "lucide-react";
+// All IDs should be replaced with your actual Appwrite IDs
+// These IDs are for demonstration purposes only and should not be used in production code
+// Always use environment variables and server-side functions to handle sensitive operations securely.
 
 const DATABASE_ID = "685121b70037b398f4a7";
 const COLLECTION_ID = "6851221a003005960079";

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './pages/Login';
 import Signup from "@/pages/Signup"
@@ -11,10 +11,19 @@ import Landing from "@/pages/Landing"
 import ProjectPage from "@/pages/ProjectPage"
 import TermsPrivacy from "./pages/TermsPrivacy";
 import Verify from './pages/Verify';
+import useStore from "@/store";
+import { account } from "@/appwrite/client";
 
 const App = () => {
+    const setUserId = useStore(state => state.setUserId);
+    useEffect(() => {
+        account.get()
+            .then(user => setUserId(user.$id))
+            .catch(() => setUserId(null));
+    }, [setUserId]);
+
     return (
-        <Router>
+        <Router basename="/aitheria">
             <Routes>
                <Route path="/" element={<Landing />} />
                 <Route path="/login" element={<Login />} />
@@ -29,7 +38,7 @@ const App = () => {
                // <Route path="/new-interview" element={<NewInterview />} /> 
                 <Route path="/project/:projectId" element={<ProjectPage />} />
                 <Route path="/projects/:projectId/new-interview" element={<NewInterview />} />
-                 <Route path="*" element={<Login />} />
+                 // <Route path="*" element={<Login />} />
                  <Route path="/terms" element={<TermsPrivacy />} />
                  <Route path="/verify" element={<Verify />} />
             </Routes>

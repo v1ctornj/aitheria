@@ -7,6 +7,8 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { cn } from "@/lib/utils"
 import { Link, useNavigate, Link as RouterLink } from "react-router-dom"
+import logo from '/logo.png';
+import useStore from "@/store";
 
 export default function Login({ className, ...props }) {
   const [email, setEmail] = useState('')
@@ -25,6 +27,9 @@ export default function Login({ className, ...props }) {
     e.preventDefault()
     try {
       await account.createEmailPasswordSession(email, password)
+      // Fetch user info and set userId in Zustand
+      const user = await account.get();
+      useStore.getState().setUserId(user.$id);
       navigate("/dashboard")
     } catch (err) {
       alert('Login failed: ' + err.message)
@@ -37,7 +42,7 @@ export default function Login({ className, ...props }) {
         <div className="flex flex-col items-center gap-2">
           <a href="#" className="flex flex-col items-center gap-2 font-medium">
             <div className="flex h-12 w-12 items-center justify-center rounded-md overflow-hidden">
-              <img src="logo.png" alt="aitheria" className="h-12 w-12 object-contain" />
+              <img src={logo} alt="aitheria" className="h-12 w-12 object-contain" />
             </div>
             <span className="sr-only">Aitheria</span>
           </a>

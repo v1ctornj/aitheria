@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-//import { getInterviewDetails } from '../utils/mem0'; // Assuming this function fetches interview details
-//import { fetchContextualInfo } from '../utils/tavily'; // Assuming this function fetches contextual info
-//import { getKeywordsQualityScore } from '../utils/keywords'; // Assuming this function checks keyword quality
 
 const InterviewDetail = () => {
     const { interviewId } = useParams();

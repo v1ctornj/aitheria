@@ -4,21 +4,27 @@ import { account, databases, ID } from "@/appwrite/client"
 import { Button } from "@/components/ui/button"
 import { Plus, LogOut, Trash2 } from "lucide-react"
 import { APPWRITE } from "@/config";
+import logo from '/logo.png';
+import useStore from "@/store";
+import { Query } from "appwrite";
 
 const DATABASE_ID = "685121b70037b398f4a7"
 const COLLECTION_ID = "6851221a003005960079"
 
-async function fetchProjects() {
-  const res = await databases.listDocuments(DATABASE_ID, COLLECTION_ID)
+async function fetchProjects(userId) {
+  const res = await databases.listDocuments(DATABASE_ID, COLLECTION_ID, [
+    Query.equal("userId", userId),
+    Query.orderDesc("$createdAt"),
+  ])
   return res.documents
 }
 
-async function createProject(name) {
+async function createProject(name, userId) {
   return await databases.createDocument(
     DATABASE_ID,
     COLLECTION_ID,
     ID.unique(),
-    { name }
+    { name, userId }
   )
 }
 
@@ -34,18 +40,32 @@ export default function Dashboard() {
   const [newProjectName, setNewProjectName] = useState("")
   const [error, setError] = useState(null)
   const [deletingId, setDeletingId] = useState(null)
+  const userId = useStore(state => state.userId)
 
   useEffect(() => {
-    fetchProjects()
+    if (!userId) return;
+    setLoading(true);
+    fetchProjects(userId)
       .then(setProjects)
       .catch(setError)
       .finally(() => setLoading(false))
-  }, [])
+  }, [userId])
 
   const handleSignOut = async () => {
     setLoading(true)
     try {
       await account.deleteSession("current")
+      // Clear Zustand store
+      if (typeof window !== 'undefined') {
+        // Remove all notes for this user from localStorage
+        const userId = useStore.getState().userId;
+        if (userId) {
+          Object.keys(localStorage)
+            .filter(key => key.startsWith(`notes-${userId}-`))
+            .forEach(key => localStorage.removeItem(key));
+        }
+      }
+      useStore.getState().clearState();
       navigate("/login")
     } catch (err) {
       alert("Sign out failed: " + err.message)
@@ -56,10 +76,10 @@ export default function Dashboard() {
 
   const handleCreateProject = async (e) => {
     e.preventDefault()
-    if (!newProjectName.trim()) return
+    if (!newProjectName.trim() || !userId) return
     setCreating(true)
     try {
-      const project = await createProject(newProjectName.trim())
+      const project = await createProject(newProjectName.trim(), userId)
       setProjects(prev => [...prev, project])
       setNewProjectName("")
       navigate(`/project/${project.$id}`)
@@ -88,7 +108,7 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pastel-pink/40 via-white to-blue-100 font-sans">
         <div className="w-full max-w-md mx-auto bg-white/90 rounded-3xl shadow-2xl p-10 flex flex-col items-center gap-8 border border-white/40 backdrop-blur-md animate-fade-in">
-          <img src="/logo.png" alt="Aitheria Logo" className="h-14 w-14 mb-2 animate-logo-pop" />
+          <img src={logo} alt="aitheria" className="h-12 w-12 object-contain" />
           <h2 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight animate-slide-down">
             Welcome to <span className="text-pastel-pink">Aitheria</span>
           </h2>
@@ -173,7 +193,7 @@ export default function Dashboard() {
       <aside className="w-full max-w-xs bg-white/80 border-r border-gray-200 flex flex-col justify-between py-8 px-6 min-h-screen shadow-lg">
         <div>
           <div className="flex items-center gap-3 mb-10">
-            <img src="/logo.png" alt="Aitheria Logo" className="h-10 w-10" />
+            <img src={logo} alt="aitheria" className="h-10 w-10 object-contain" />
             <span className="text-2xl font-bold tracking-tight text-gray-900">
               A<span className="text-pastel-pink">i</span>theria
             </span>

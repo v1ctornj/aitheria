@@ -1,7 +1,9 @@
-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
 
 
-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
+Security Warning
+
+> This project exposes API keys and/or sensitive credentials in the frontend code for demonstration and judging purposes only. **Do not use these credentials in production or for any real user data.**
+
+> In a real-world deployment, all sensitive keys and operations should be handled securely on the server side, and never exposed to the client or browser.
 
 
-aitheria api key - 'm0-7sgEe2KqMTbKdUzHhhGBouppZyCyxcndRERYAMzr'

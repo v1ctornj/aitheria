@@ -11,12 +11,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 
-import MemoryClient from "mem0ai";
 import Groq from "groq-sdk";
 import ProjectContextualization from "./ProjectContextualization";
 import { GROQ } from "@/config";
 
-//const MEM0_API_KEY = "m0-7sgEe2KqMTbKdUzHhhGBouppZyCyxcndRERYAMzr";
+
 const GROQ_API_KEY = GROQ.API_KEY;
 
 

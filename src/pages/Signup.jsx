@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Link, useNavigate, Link as RouterLink } from "react-router-dom"
+import logo from '/logo.png';
+import useStore from "@/store";
 
 export default function Signup({ className, ...props }) {
   const [email, setEmail] = useState('');
@@ -24,6 +26,10 @@ export default function Signup({ className, ...props }) {
     e.preventDefault();
     try {
       await account.create(ID.unique(), email, password, name);
+      // After signup, log in and set userId in Zustand
+      await account.createEmailPasswordSession(email, password);
+      const user = await account.get();
+      useStore.getState().setUserId(user.$id);
       alert('Account created! You can now log in.');
       navigate("/login");
     } catch (err) {
@@ -38,7 +44,7 @@ export default function Signup({ className, ...props }) {
         <div className="flex flex-col items-center gap-2">
           <a href="#" className="flex flex-col items-center gap-2 font-medium">
             <div className="flex h-12 w-12 items-center justify-center rounded-md overflow-hidden">
-              <img src="logo.png" alt="aitheria" className="h-12 w-12 object-contain" />
+              <img src={logo} alt="aitheria" className="h-12 w-12 object-contain" />
             </div>
             <span className="sr-only">Aitheria</span>
           </a>

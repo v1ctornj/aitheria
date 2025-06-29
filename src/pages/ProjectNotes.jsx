@@ -6,9 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Copy, Check, Trash2, Undo2 } from "lucide-react";
+import { Copy, Check, Trash2 } from "lucide-react";
 
-export default function ProjectNotes({ projectId, interviews, note, setNote }) {
+export default function ProjectNotes({ userId, projectId, interviews, note, setNote }) {
   const [lastSaved, setLastSaved] = useState(null);
   const [status, setStatus] = useState("");
   const [history, setHistory] = useState([]);
@@ -20,7 +20,8 @@ export default function ProjectNotes({ projectId, interviews, note, setNote }) {
 
   // Load saved note from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem(`notes-${projectId}`);
+    if (!userId) return;
+    const saved = localStorage.getItem(`notes-${userId}-${projectId}`);
     if (saved) {
       const { content, timestamp, history: savedHistory } = JSON.parse(saved);
       setNote(content);
@@ -28,14 +29,15 @@ export default function ProjectNotes({ projectId, interviews, note, setNote }) {
       setLastSaved(new Date(timestamp));
       setHistory(savedHistory || []);
     }
-  }, [projectId]);
+  }, [userId, projectId]);
 
   // Save note to localStorage
   const saveNote = () => {
+    if (!userId) return;
     const timestamp = new Date();
     const newHistory = [...history, { content: note, timestamp }];
     localStorage.setItem(
-      `notes-${projectId}`,
+      `notes-${userId}-${projectId}`,
       JSON.stringify({ content: note, timestamp, history: newHistory })
     );
     setLastSaved(timestamp);
@@ -44,22 +46,10 @@ export default function ProjectNotes({ projectId, interviews, note, setNote }) {
     setTimeout(() => setStatus(""), 1500);
   };
 
-  // Undo last change
-  const undoNote = () => {
-    if (history.length > 0) {
-      const prev = history[history.length - 2] || { content: "", timestamp: null };
-      setNote(prev.content);
-      setFilteredNote(prev.content);
-      setLastSaved(prev.timestamp ? new Date(prev.timestamp) : null);
-      setHistory(history.slice(0, -1));
-      setStatus("undone");
-      setTimeout(() => setStatus(""), 1500);
-    }
-  };
-
   // Delete note
   const deleteNote = () => {
-    localStorage.removeItem(`notes-${projectId}`);
+    if (!userId) return;
+    localStorage.removeItem(`notes-${userId}-${projectId}`);
     setNote("");
     setFilteredNote("");
     setLastSaved(null);
@@ -124,17 +114,14 @@ export default function ProjectNotes({ projectId, interviews, note, setNote }) {
                 />
                 <div className="flex flex-wrap gap-2 justify-between items-center">
                   <div className="flex gap-2">
-                    <Button onClick={saveNote} className="border border-black hover:bg-muted" size="sm">
+                    <Button onClick={saveNote} className="border border-black hover:bg-muted hover:cursor-pointer" size="sm">
                       <Check className="w-4 h-4 mr-1" /> Save
                     </Button>
-                    <Button onClick={undoNote} className="border border-black hover:bg-muted" size="sm" disabled={history.length < 2}>
-                      <Undo2 className="w-4 h-4 mr-1" /> Undo
-                    </Button>
-                    <Button onClick={deleteNote} className="border border-red-400 text-red-600 hover:bg-red-50" size="sm">
+                    <Button onClick={deleteNote} className="border border-red-400 text-red-600 hover:bg-red-50 hover:cursor-pointer" size="sm">
                       <Trash2 className="w-4 h-4 mr-1" /> Delete
                     </Button>
                   </div>
-                  <Button onClick={copyNote} variant="outline" size="sm">
+                  <Button onClick={copyNote} variant="outline" size="sm" className="hover:cursor-pointer">
                     {copied ? <Check className="w-4 h-4 mr-1" /> : <Copy className="w-4 h-4 mr-1" />}
                     {copied ? "Copied" : "Copy"}
                   </Button>
@@ -143,12 +130,6 @@ export default function ProjectNotes({ projectId, interviews, note, setNote }) {
                   <Alert variant="success" className="mt-2">
                     <AlertTitle>Saved!</AlertTitle>
                     <AlertDescription>Your note has been saved.</AlertDescription>
-                  </Alert>
-                )}
-                {status === "undone" && (
-                  <Alert variant="info" className="mt-2">
-                    <AlertTitle>Undone!</AlertTitle>
-                    <AlertDescription>Last change has been undone.</AlertDescription>
                   </Alert>
                 )}
                 {status === "deleted" && (
