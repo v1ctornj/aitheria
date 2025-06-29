@@ -34,6 +34,14 @@ Designed for researchers unfamiliar with technical tooling, Aitheria is your int
         
 
 ---
+## ⚠️ Warning: Exposed API Keys
+
+> **Important Note:**  
+> This project contains exposed API keys **intentionally and only for demonstration purposes** during the hackathon. The keys are scoped to free-tier accounts, rate-limited.
+>
+> 🛑 **Kindly do not abuse these keys.** They are publicly visible only to simplify evaluation.
+>
+> 💡 _In a production-grade deployment, all API requests would be securely routed through a backend using environment variables and serverless functions , and these keys would **never** be exposed in the browser._
 
 
 ## ⚙️ Setup Instructions
