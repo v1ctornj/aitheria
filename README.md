@@ -1,79 +1,145 @@
-# Aithēria
+# Aitheria 🔍
 
-Aithēria is an AI-powered companion for researchers conducting qualitative fieldwork. It assists in transcribing, theming, contextualizing, and managing multiple ethnographic projects.
+Aitheria is an AI-powered qualitative research assistant built for social science,humanities researchers and journalists working with interview-based fieldwork. It simplifies the process of managing, theming, and contextualizing qualitative data with a beautiful, easy-to-use interface powered by cutting-edge LLM and search APIs.
 
-## Features
+Designed for researchers unfamiliar with technical tooling, Aitheria is your intuitive companion from transcription to analysis to insight.
 
-- **User Authentication**: Secure login and registration using Appwrite.
-- **Project Management**: Create and manage multiple research projects.
-- **Interview Upload**: Upload audio files for transcription.
-- **Transcription**: In-browser transcription using Whisper Web.
-- **Thematic Analysis**: Generate thematic summaries using LLMs.
-- **Contextualization**: Fetch relevant news and policy information via Tavily.
-- **Archiving**: Export memos and insights for reporting.
+---
 
-## Tech Stack
+## ✨ Features
 
-- **Frontend Framework**: React + Vite + Tailwind CSS
-- **State Management**: Zustand
-- **Authentication & Database**: Appwrite
-- **Transcription**: Whisper Web (WASM)
-- **LLM**: OpenRouter or Together.ai
-- **Memory Layer**: Mem0 Pro
-- **Contextual Info Fetch**: Tavily
+- **User Authentication** – Secure login and registration via Appwrite.
+- **Project Management** – Create, view, and switch between multiple research projects.
+- **Interview Upload** – Upload interviews ( support for most of the popular audio formats)
+- **Thematic Analysis** – Extract key themes using Groq's LLaMA 3.3-70B model.
+- **Keyword Extraction** – Categorized and contextual keywords with source quotes.
+- **Visualization** – Animated bar charts, excerpted quotes, and future heatmap support.
+- **Notes Module** – Maintain and persist personal project notes.
+- **Contextualization** – Enrich findings with external context using Tavily.
+  
 
-## Project Structure
+---
+
+## 🧠 Tech Stack
+
+| Layer             | Tech                                   |
+|-------------------|--------------------------------         |
+| Frontend          | React + Vite + Tailwind CSS + ShadCN UI |
+| State Management  | Zustand                                 |
+| Authentication    | Appwrite                                |
+| Database & Storage| Appwrite                                |
+| Thematic Analysis | Groq's LLaMA 3.3-70B                    |
+| Contextual Fetch  | Tavily API                              |           
+| Transcription     | Assembly AI                             |
+        
+
+---
+
+
+## ⚙️ Setup Instructions
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/v1ctornj/aitheria.git
+cd aitheria
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure Appwrite
+
+- Set up your Appwrite project and web platform.
+- Replace the values in `src/appwrite/config.js` with your project ID, endpoint, and bucket ID.
+
+### 4. Add API Keys
+
+Create API keys for - appwrite , Assembly AI , Groq and Tavily ( places commented in the code )
+
+
+
+### 5. Start the app
+
+```bash
+npm run dev
+```
+
+The app will run at `http://localhost:3000`.
+
+---
+
+## 🧪 Usage Instructions
+
+1. **Login or Register** using Appwrite.
+2. **Create a new Project** from the dashboard.
+3. **Upload interview file** 
+4. Navigate between tabs:
+   - **Insights**: View major themes with subpoints.
+   - **Keywords**: Browse categorized keywords, quotes, and visualizations.
+   - **Notes**: Jot down field notes, theories, or follow-ups.
+   - **Contextualization**: Get related policy, news, or academic references ( available in the Insights section )
+
+---
+
+## 📊 Example Visualizations
+
+- **Bar Chart** showing frequency of key terms per theme.
+- **Quote Highlights** from interview transcripts.
+- *(Upcoming)*: Heatmap of thematic density across transcripts.
+
+---
+
+## 🧩 Architecture Overview
 
 ```
-/aitheria-app/
-├── public/
-├── src/
-│   ├── appwrite/         # Appwrite client + auth/session utils
-│   ├── components/       # Reusable UI components
-│   ├── pages/            # Application pages
-│   ├── utils/            # Helper functions
-│   ├── store/            # Global state management
-│   └── App.jsx           # Main application component
-├── tailwind.config.js     # Tailwind CSS configuration
-├── vite.config.js         # Vite configuration
-├── index.html             # Main HTML entry point
-└── README.md              # Project documentation
++---------------------+
+|      Frontend       |
+|  React + ShadCN UI  |
++---------------------+
+         |
+         v
++---------------------+         +---------------------+
+|     Appwrite        | <-----> |  LocalStorage Cache |
+| Auth, DB, Storage   |         |   Theme & Notes     |
++---------------------+         +---------------------+
+         |
+         v
++---------------------+         +---------------------+
+|  Groq LLM API       |         |   Tavily API        |
+| Thematic + Keyword  | <-----> | Context Enrichment  |
++---------------------+         +---------------------+
 ```
 
-## Setup Instructions
+---
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/aitheria-app.git
-   cd aitheria-app
-   ```
+## 🙌 Contributions
 
-2. Install dependencies:
-   ```
-   npm install
-   ```
+Have an idea to improve Aitheria Feel free to open issues or pull requests.
 
-3. Configure Appwrite:
-   - Set up your Appwrite project and update the client configuration in `src/appwrite/client.js`.
+To contribute:
 
-4. Run the application:
-   ```
-   npm run dev
-   ```
+```bash
+git checkout -b feature/new-feature
+git commit -m "Add new feature"
+git push origin feature/new-feature
+```
 
-5. Access the application at `http://localhost:3000`.
+---
 
-## Usage Guidelines
+## 📜 License
 
-- Use the login page to authenticate and access your projects.
-- Create new projects from the dashboard.
-- Upload interviews and initiate transcription.
-- View thematic summaries and contextual information for each interview.
+This project is licensed under the MIT License.
 
-## Contribution
+---
 
-Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
+## ✉️ Contact
 
-## License
+For questions reach out via GitHub Issues
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+---
+
+### Made with ❤️ for researchers.
