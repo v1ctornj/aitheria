@@ -50,9 +50,7 @@ export default function TermsPrivacy() {
             <li>
               <strong>Access & Deletion:</strong> You may request access to or deletion of your data at any time.
             </li>
-            <li>
-              <strong>Contact:</strong> For questions about your privacy, contact us at <a href="mailto:support@aitheria.com" className="underline">support@aitheria.com</a>.
-            </li>
+           
           </ol>
         </section>
 

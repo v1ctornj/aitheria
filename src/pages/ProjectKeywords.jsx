@@ -90,7 +90,7 @@ ${transcript}
       });
 
       let content = chatCompletion.choices?.[0]?.message?.content || "";
-      console.log("Groq raw content:", content);
+      //console.log("Groq raw content:", content);
 
      // Parse JSON with fallback
       let jsonText = "";
@@ -106,7 +106,7 @@ ${transcript}
         }
       }
 
-      console.log("Extracted JSON:", jsonText);
+      //console.log("Extracted JSON:", jsonText);
       const parsed = JSON.parse(jsonText);
       setKeywords(parsed);
 

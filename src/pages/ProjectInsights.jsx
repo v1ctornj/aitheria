@@ -36,7 +36,8 @@ export default function ProjectInsights({ projectId, interviews, themes, setThem
 
       const prompt = `
 You are a qualitative research assistant. Analyze the following interview transcript and extract the main themes and their subpoints. 
-Return your answer as a JSON array like: 
+try to find maximum themes and subpoints, but do not force it.
+Return your answer only as a JSON array like: 
 [{"theme": "Theme title", "subpoints": ["point 1", "point 2"]}]
 Transcript:
 ${transcript}
